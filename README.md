@@ -2,7 +2,7 @@
 
 A Chrome extension that replaces the new tab page with a distraction-free Markdown editor.
 
-![Custom Theme](store/screenshots/01-custom-ommwriter.jpg)
+![TabDraft](store/screenshots/04-todo-dark.jpg)
 
 ## Features
 
