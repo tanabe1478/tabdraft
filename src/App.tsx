@@ -38,10 +38,6 @@ export function App() {
         e.preventDefault();
         e.stopPropagation();
         markdownRef.current?.focus();
-      } else if (matchesKeybinding(e, keybindings!.togglePreview)) {
-        e.preventDefault();
-        e.stopPropagation();
-        markdownRef.current?.togglePreview();
       }
     }
     window.addEventListener("keydown", handleKeyDown, true);
@@ -117,8 +113,6 @@ export function App() {
           {formatKeybinding(keybindings.focusTodo)}: TODO
           {" \u00b7 "}
           {formatKeybinding(keybindings.focusEditor)}: Editor
-          {" \u00b7 "}
-          {formatKeybinding(keybindings.togglePreview)}: Preview
         </span>
         <button
           className="btn btn-settings"

@@ -9,13 +9,11 @@ export interface Keybinding {
 export interface KeybindingMap {
   readonly focusTodo: Keybinding;
   readonly focusEditor: Keybinding;
-  readonly togglePreview: Keybinding;
 }
 
 export const defaultKeybindings: KeybindingMap = {
   focusTodo: { code: "Digit1", altKey: true },
   focusEditor: { code: "Digit2", altKey: true },
-  togglePreview: { code: "KeyP", altKey: true },
 };
 
 const KEYBINDINGS_KEY = "tabdraft_keybindings";

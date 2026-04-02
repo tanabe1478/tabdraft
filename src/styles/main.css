@@ -233,119 +233,17 @@ body {
   overflow: hidden;
 }
 
-.editor-tabs {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 8px;
-}
-
-.tab-btn {
-  padding: 6px 16px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius) var(--radius) 0 0;
-  color: var(--text-muted);
-  cursor: pointer;
-  font-size: 13px;
-  transition: all 0.15s;
-}
-
-.tab-btn.active {
-  background: var(--bg);
-  color: var(--accent);
-  border-bottom-color: var(--bg);
-}
-
-.tab-btn:hover:not(.active) {
-  color: var(--text);
-}
-
-.markdown-editor {
-  display: block;
-  width: 100%;
-  height: 100%;
+.codemirror-wrapper {
   flex: 1;
-  padding: 16px;
+  min-height: 0;
+  overflow: hidden;
   background: var(--bg);
-  border: none;
-  color: var(--text);
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-  font-size: 14px;
-  line-height: 1.7;
-  resize: none;
-  outline: none;
-  tab-size: 2;
-  overflow-y: auto;
 }
 
-.markdown-editor::placeholder {
-  color: var(--text-muted);
-}
-
-.markdown-preview {
-  display: block;
-  width: 100%;
+.codemirror-wrapper .cm-editor {
   height: 100%;
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
   background: var(--bg);
-  border: none;
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.markdown-preview h1,
-.markdown-preview h2,
-.markdown-preview h3 {
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-  color: var(--accent);
-}
-
-.markdown-preview h1 { font-size: 1.6em; }
-.markdown-preview h2 { font-size: 1.3em; }
-.markdown-preview h3 { font-size: 1.1em; }
-
-.markdown-preview p {
-  margin-bottom: 0.8em;
-}
-
-.markdown-preview code {
-  background: var(--bg);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.9em;
-}
-
-.markdown-preview pre {
-  background: var(--bg);
-  padding: 12px;
-  border-radius: var(--radius);
-  overflow-x: auto;
-  margin-bottom: 1em;
-}
-
-.markdown-preview pre code {
-  padding: 0;
-  background: none;
-}
-
-.markdown-preview ul,
-.markdown-preview ol {
-  margin-bottom: 0.8em;
-  padding-left: 1.5em;
-}
-
-.markdown-preview blockquote {
-  border-left: 3px solid var(--accent);
-  padding-left: 12px;
-  color: var(--text-muted);
-  margin-bottom: 0.8em;
-}
-
-.markdown-preview a {
-  color: var(--accent);
+  color: var(--text);
 }
 
 .hidden {

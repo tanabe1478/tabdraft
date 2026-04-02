@@ -19,7 +19,6 @@ type BindingKey = keyof KeybindingMap;
 const labels: Record<BindingKey, string> = {
   focusTodo: "TODOにフォーカス",
   focusEditor: "エディタにフォーカス",
-  togglePreview: "プレビュー切替",
 };
 
 export function SettingsDialog({ open, keybindings, onSave, onClose }: SettingsDialogProps) {

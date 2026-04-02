@@ -1,0 +1,18 @@
+TabDraft - New Tab Markdown Editor
+
+Turn your new tab into a productivity workspace. TabDraft replaces Chrome's default new tab page with a Markdown editor and TODO list.
+
+Features:
+- Markdown editor with live preview
+- TODO list with completion tracking
+- Customizable keyboard shortcuts
+- Auto-focus on editor when opening a new tab
+- Data persists across sessions via Chrome storage
+- Clean, distraction-free interface
+
+Keyboard Shortcuts (customizable):
+- Ctrl+1: Focus TODO list
+- Ctrl+2: Focus Markdown editor
+- Ctrl+3: Toggle Markdown preview
+
+Your data stays local in your browser. No accounts, no cloud sync, no tracking.
