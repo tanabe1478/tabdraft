@@ -32,6 +32,10 @@ export default defineConfig({
           resolve(__dirname, "src/icons/icon128.png"),
           resolve(iconsDir, "icon128.png")
         );
+        copyFileSync(
+          resolve(__dirname, "src/early-theme.js"),
+          resolve(distDir, "early-theme.js")
+        );
       },
     },
   ],

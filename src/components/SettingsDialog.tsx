@@ -3,11 +3,13 @@ import {
   type KeybindingMap,
   type Settings,
   type Theme,
+  type TextAlign,
   formatKeybinding,
   captureKeybinding,
   defaultKeybindings,
   defaultSettings,
 } from "../keybindings";
+import { generateCustomTemplate } from "../themes";
 import { t } from "../i18n";
 
 interface SettingsDialogProps {
@@ -30,6 +32,7 @@ const themeOptions: { value: Theme; label: () => string }[] = [
   { value: "light", label: () => t("themeLight") },
   { value: "dark", label: () => t("themeDark") },
   { value: "monokai", label: () => t("themeMonokai") },
+  { value: "custom", label: () => t("themeCustom") },
 ];
 
 export function SettingsDialog({ open, keybindings, settings, onSave, onClose }: SettingsDialogProps) {
@@ -94,6 +97,77 @@ export function SettingsDialog({ open, keybindings, settings, onSave, onClose }:
             ))}
           </select>
         </div>
+
+        {draftSettings.theme === "custom" && (
+          <div className="setting-row">
+            <div className="custom-css-header">
+              <span className="custom-css-label">{t("customCSS")}</span>
+              <button
+                className="btn btn-secondary btn-small"
+                onClick={() =>
+                  setDraftSettings({ ...draftSettings, customCSS: generateCustomTemplate() })
+                }
+              >
+                {t("resetTemplate")}
+              </button>
+            </div>
+            <textarea
+              className="custom-css-editor"
+              rows={14}
+              spellCheck={false}
+              value={draftSettings.customCSS || generateCustomTemplate()}
+              onChange={(e) =>
+                setDraftSettings({ ...draftSettings, customCSS: e.target.value })
+              }
+            />
+          </div>
+        )}
+
+        {draftSettings.theme !== "custom" && (
+          <>
+            <h3 className="dialog-section-title">{t("textAlign")}</h3>
+            <div className="setting-row">
+              <select
+                className="setting-select"
+                value={draftSettings.textAlign}
+                onChange={(e) =>
+                  setDraftSettings({ ...draftSettings, textAlign: e.target.value as TextAlign })
+                }
+              >
+                <option value="left">{t("textAlignLeft")}</option>
+                <option value="center">{t("textAlignCenter")}</option>
+              </select>
+            </div>
+
+            <h3 className="dialog-section-title">{t("fontSize")}</h3>
+            <div className="setting-row setting-row-inline">
+              <input
+                type="range"
+                min={12}
+                max={24}
+                value={draftSettings.fontSize}
+                onChange={(e) =>
+                  setDraftSettings({ ...draftSettings, fontSize: Number(e.target.value) })
+                }
+              />
+              <span className="setting-value">{draftSettings.fontSize}px</span>
+            </div>
+
+            <h3 className="dialog-section-title">{t("headingSize")}</h3>
+            <div className="setting-row">
+              <select
+                className="setting-select"
+                value={draftSettings.headingSize}
+                onChange={(e) =>
+                  setDraftSettings({ ...draftSettings, headingSize: e.target.value as "normal" | "large" })
+                }
+              >
+                <option value="large">{t("headingSizeLarge")}</option>
+                <option value="normal">{t("headingSizeNormal")}</option>
+              </select>
+            </div>
+          </>
+        )}
 
         <h3 className="dialog-section-title">{t("panels")}</h3>
         <div className="setting-row">

@@ -16,24 +16,33 @@ export const defaultKeybindings: KeybindingMap = {
   focusEditor: { code: "Digit2", altKey: true },
 };
 
-export type Theme = "system" | "light" | "dark" | "monokai";
+export type Theme = "system" | "light" | "dark" | "monokai" | "custom";
+export type TextAlign = "left" | "center";
 
 export interface Settings {
   readonly showTodo: boolean;
   readonly theme: Theme;
+  readonly customCSS: string;
+  readonly textAlign: TextAlign;
+  readonly fontSize: number;
+  readonly headingSize: "normal" | "large";
 }
 
 export const defaultSettings: Settings = {
   showTodo: false,
   theme: "system",
+  customCSS: "",
+  textAlign: "left",
+  fontSize: 14,
+  headingSize: "large",
 };
 
 const KEYBINDINGS_KEY = "tabdraft_keybindings";
 const SETTINGS_KEY = "tabdraft_settings";
 
-function getStorage(): chrome.storage.SyncStorageArea | null {
+function getStorage(): chrome.storage.LocalStorageArea | null {
   if (typeof chrome !== "undefined" && chrome.storage?.sync) {
-    return chrome.storage.sync;
+    return chrome.storage.local;
   }
   return null;
 }
@@ -58,22 +67,26 @@ export async function saveKeybindings(bindings: KeybindingMap): Promise<void> {
 }
 
 export async function loadSettings(): Promise<Settings> {
+  let saved: Partial<Settings> | undefined;
   const storage = getStorage();
   if (storage) {
     const result = await storage.get(SETTINGS_KEY);
-    return (result[SETTINGS_KEY] as Settings | undefined) ?? defaultSettings;
+    saved = result[SETTINGS_KEY] as Partial<Settings> | undefined;
+  } else {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    saved = raw ? JSON.parse(raw) : undefined;
   }
-  const raw = localStorage.getItem(SETTINGS_KEY);
-  return raw ? JSON.parse(raw) : defaultSettings;
+  return { ...defaultSettings, ...saved };
 }
 
 export async function saveSettings(settings: Settings): Promise<void> {
+  // Always mirror to localStorage for instant theme on page load (anti-flash)
+  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {}
   const storage = getStorage();
   if (storage) {
     await storage.set({ [SETTINGS_KEY]: settings });
     return;
   }
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
 }
 
 export function matchesKeybinding(e: KeyboardEvent, binding: Keybinding): boolean {

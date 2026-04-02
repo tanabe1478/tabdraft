@@ -16,9 +16,9 @@ const defaultData: AppData = {
   markdown: "",
 };
 
-function getStorage(): chrome.storage.SyncStorageArea | null {
+function getStorage(): chrome.storage.LocalStorageArea | null {
   if (typeof chrome !== "undefined" && chrome.storage?.sync) {
-    return chrome.storage.sync;
+    return chrome.storage.local;
   }
   return null;
 }

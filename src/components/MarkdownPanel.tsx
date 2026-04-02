@@ -35,7 +35,7 @@ const markdownHighlight = HighlightStyle.define([
 const theme = EditorView.theme({
   "&": {
     height: "100%",
-    fontSize: "14px",
+    fontSize: "var(--cm-font-size, 14px)",
   },
   ".cm-editor": {
     height: "100%",
@@ -43,10 +43,12 @@ const theme = EditorView.theme({
   ".cm-scroller": {
     overflow: "auto",
     fontFamily: "'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif",
-    lineHeight: "1.7",
+    lineHeight: "var(--cm-line-height, 1.7)",
   },
   ".cm-content": {
     padding: "12px 16px",
+    maxWidth: "var(--cm-content-max-width, none)",
+    margin: "0 auto",
     caretColor: "var(--text)",
   },
   ".cm-line": {
@@ -64,16 +66,16 @@ const theme = EditorView.theme({
   ".cm-placeholder": {
     color: "var(--text-muted)",
   },
-  ".cm-h1": { fontSize: "1.6em", fontWeight: "bold", color: "var(--accent)" },
-  ".cm-h2": { fontSize: "1.4em", fontWeight: "bold", color: "var(--accent)" },
-  ".cm-h3": { fontSize: "1.2em", fontWeight: "bold", color: "var(--accent)" },
-  ".cm-h4": { fontSize: "1.1em", fontWeight: "bold", color: "var(--accent)" },
-  ".cm-h5": { fontSize: "1.05em", fontWeight: "bold", color: "var(--accent)" },
-  ".cm-h6": { fontSize: "1em", fontWeight: "bold", color: "var(--accent)" },
+  ".cm-h1": { fontSize: "var(--cm-h1-size, 1.6em)", fontWeight: "var(--cm-heading-weight, bold)", color: "var(--cm-heading-color, var(--accent))" },
+  ".cm-h2": { fontSize: "var(--cm-h2-size, 1.4em)", fontWeight: "var(--cm-heading-weight, bold)", color: "var(--cm-heading-color, var(--accent))" },
+  ".cm-h3": { fontSize: "var(--cm-h3-size, 1.2em)", fontWeight: "var(--cm-heading-weight, bold)", color: "var(--cm-heading-color, var(--accent))" },
+  ".cm-h4": { fontSize: "var(--cm-h4-size, 1.1em)", fontWeight: "var(--cm-heading-weight, bold)", color: "var(--cm-heading-color, var(--accent))" },
+  ".cm-h5": { fontSize: "var(--cm-h5-size, 1.05em)", fontWeight: "var(--cm-heading-weight, bold)", color: "var(--cm-heading-color, var(--accent))" },
+  ".cm-h6": { fontSize: "var(--cm-h6-size, 1em)", fontWeight: "var(--cm-heading-weight, bold)", color: "var(--cm-heading-color, var(--accent))" },
   ".cm-strong": { fontWeight: "bold" },
   ".cm-em": { fontStyle: "italic" },
   ".cm-strikethrough": { textDecoration: "line-through" },
-  ".cm-md-link": { color: "var(--accent)", textDecoration: "underline" },
+  ".cm-md-link": { color: "var(--cm-heading-color, var(--accent))", textDecoration: "underline" },
   ".cm-md-code": { fontFamily: "monospace", color: "var(--cm-code)" },
   ".cm-md-quote": { fontStyle: "italic", color: "var(--text-muted)" },
   ".cm-md-meta": { color: "var(--text-muted)" },

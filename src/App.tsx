@@ -102,9 +102,28 @@ export function App() {
   // Apply theme
   useEffect(() => {
     if (!settings) return;
-    applyTheme(settings.theme);
-    return watchSystemTheme(settings.theme, () => applyTheme(settings.theme));
-  }, [settings?.theme]);
+    const root = document.documentElement;
+    applyTheme(settings.theme, settings.customCSS);
+    // Clear inline overrides so custom CSS has full control
+    const inlineProps = [
+      "--cm-content-max-width", "--cm-font-size", "--cm-heading-weight",
+      ...Array.from({ length: 6 }, (_, i) => `--cm-h${i + 1}-size`),
+    ];
+    for (const prop of inlineProps) {
+      root.style.removeProperty(prop);
+    }
+    if (settings.theme !== "custom") {
+      root.style.setProperty("--cm-content-max-width", settings.textAlign === "center" ? "700px" : "none");
+      root.style.setProperty("--cm-font-size", `${settings.fontSize}px`);
+      if (settings.headingSize === "normal") {
+        for (let i = 1; i <= 6; i++) {
+          root.style.setProperty(`--cm-h${i}-size`, "1em");
+        }
+        root.style.setProperty("--cm-heading-weight", "normal");
+      }
+    }
+    return watchSystemTheme(settings.theme, () => applyTheme(settings.theme, settings.customCSS));
+  }, [settings?.theme, settings?.customCSS, settings?.textAlign, settings?.fontSize, settings?.headingSize]);
 
   // Auto-focus editor on mount (after window.open bypasses omnibox focus)
   useEffect(() => {

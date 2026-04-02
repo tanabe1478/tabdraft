@@ -6,54 +6,10 @@
   box-sizing: border-box;
 }
 
-/* ---- Theme: Dark (default) ---- */
-:root,
-[data-theme="dark"] {
-  --bg: #1e1e2e;
-  --surface: #282840;
-  --surface-hover: #313150;
-  --text: #cdd6f4;
-  --text-muted: #6c7086;
-  --accent: #89b4fa;
-  --accent-hover: #74c7ec;
-  --danger: #f38ba8;
-  --border: #45475a;
-  --todo-done: #a6adc8;
+/* Theme variables are injected by themes.ts via <style id="tabdraft-builtin-themes"> */
+
+:root {
   --radius: 8px;
-  --cm-selection: rgba(56, 139, 253, 0.3);
-  --cm-code: #fab387;
-}
-
-/* ---- Theme: Light ---- */
-[data-theme="light"] {
-  --bg: #ffffff;
-  --surface: #f5f5f5;
-  --surface-hover: #e8e8e8;
-  --text: #1e1e1e;
-  --text-muted: #6b7280;
-  --accent: #2563eb;
-  --accent-hover: #1d4ed8;
-  --danger: #dc2626;
-  --border: #d1d5db;
-  --todo-done: #9ca3af;
-  --cm-selection: rgba(37, 99, 235, 0.2);
-  --cm-code: #b45309;
-}
-
-/* ---- Theme: Monokai ---- */
-[data-theme="monokai"] {
-  --bg: #272822;
-  --surface: #3e3d32;
-  --surface-hover: #49483e;
-  --text: #f8f8f2;
-  --text-muted: #75715e;
-  --accent: #a6e22e;
-  --accent-hover: #b6f23e;
-  --danger: #f92672;
-  --border: #49483e;
-  --todo-done: #75715e;
-  --cm-selection: rgba(166, 226, 46, 0.2);
-  --cm-code: #e6db74;
 }
 
 html,
@@ -334,6 +290,25 @@ body {
   margin-bottom: 16px;
 }
 
+.setting-row-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.setting-row-inline input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent);
+}
+
+.setting-value {
+  font-size: 13px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  color: var(--text);
+  min-width: 40px;
+  text-align: right;
+}
+
 .setting-label {
   display: flex;
   align-items: center;
@@ -354,6 +329,42 @@ body {
 }
 
 .setting-select:focus {
+  border-color: var(--accent);
+}
+
+.custom-css-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.custom-css-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.btn-small {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.custom-css-editor {
+  width: 100%;
+  padding: 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  tab-size: 2;
+}
+
+.custom-css-editor:focus {
   border-color: var(--accent);
 }
 
