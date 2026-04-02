@@ -6,7 +6,9 @@
   box-sizing: border-box;
 }
 
-:root {
+/* ---- Theme: Dark (default) ---- */
+:root,
+[data-theme="dark"] {
   --bg: #1e1e2e;
   --surface: #282840;
   --surface-hover: #313150;
@@ -18,6 +20,40 @@
   --border: #45475a;
   --todo-done: #a6adc8;
   --radius: 8px;
+  --cm-selection: rgba(56, 139, 253, 0.3);
+  --cm-code: #fab387;
+}
+
+/* ---- Theme: Light ---- */
+[data-theme="light"] {
+  --bg: #ffffff;
+  --surface: #f5f5f5;
+  --surface-hover: #e8e8e8;
+  --text: #1e1e1e;
+  --text-muted: #6b7280;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --danger: #dc2626;
+  --border: #d1d5db;
+  --todo-done: #9ca3af;
+  --cm-selection: rgba(37, 99, 235, 0.2);
+  --cm-code: #b45309;
+}
+
+/* ---- Theme: Monokai ---- */
+[data-theme="monokai"] {
+  --bg: #272822;
+  --surface: #3e3d32;
+  --surface-hover: #49483e;
+  --text: #f8f8f2;
+  --text-muted: #75715e;
+  --accent: #a6e22e;
+  --accent-hover: #b6f23e;
+  --danger: #f92672;
+  --border: #49483e;
+  --todo-done: #75715e;
+  --cm-selection: rgba(166, 226, 46, 0.2);
+  --cm-code: #e6db74;
 }
 
 html,
@@ -38,26 +74,31 @@ body {
   height: 100%;
 }
 
-/* Header */
-.header {
+/* Floating settings button */
+.btn-settings-float {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 12px 24px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
+  justify-content: center;
+  transition: all 0.15s;
+  opacity: 0.4;
 }
 
-.header-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--accent);
-  letter-spacing: 0.5px;
-}
-
-.header-shortcuts {
-  font-size: 11px;
-  color: var(--text-muted);
+.btn-settings-float:hover {
+  opacity: 1;
+  color: var(--text);
+  background: var(--surface-hover);
 }
 
 /* Main layout */
@@ -87,6 +128,7 @@ body {
   flex: 1;
   min-width: 0;
   min-height: 0;
+  padding: 0;
 }
 
 .panel-title {
@@ -250,19 +292,6 @@ body {
   display: none !important;
 }
 
-/* Settings button */
-.btn-settings {
-  background: none;
-  color: var(--text-muted);
-  font-size: 18px;
-  padding: 4px 8px;
-  line-height: 1;
-}
-
-.btn-settings:hover {
-  color: var(--text);
-}
-
 /* Dialog */
 .dialog-overlay {
   position: fixed;
@@ -299,6 +328,33 @@ body {
   letter-spacing: 1px;
   color: var(--text-muted);
   margin-bottom: 12px;
+}
+
+.setting-row {
+  margin-bottom: 16px;
+}
+
+.setting-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.setting-select {
+  padding: 6px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+}
+
+.setting-select:focus {
+  border-color: var(--accent);
 }
 
 .keybinding-list {
@@ -368,6 +424,10 @@ body {
   background: var(--bg);
   border: 1px solid var(--border);
   color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--radius);
+  font-size: 14px;
+  transition: all 0.15s;
 }
 
 .btn-secondary:hover {
@@ -380,6 +440,11 @@ body {
   background: var(--accent);
   color: var(--bg);
   font-weight: 600;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 14px;
+  transition: background 0.15s;
 }
 
 .btn-primary:hover {

@@ -4,6 +4,7 @@ import { EditorState } from "@codemirror/state";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { syntaxHighlighting, HighlightStyle } from "@codemirror/language";
 import { tags } from "@lezer/highlight";
+import { t } from "../i18n";
 
 interface MarkdownPanelProps {
   readonly value: string;
@@ -15,20 +16,20 @@ export interface MarkdownPanelHandle {
 }
 
 const markdownHighlight = HighlightStyle.define([
-  { tag: tags.heading1, fontSize: "1.6em", fontWeight: "bold" },
-  { tag: tags.heading2, fontSize: "1.4em", fontWeight: "bold" },
-  { tag: tags.heading3, fontSize: "1.2em", fontWeight: "bold" },
-  { tag: tags.heading4, fontSize: "1.1em", fontWeight: "bold" },
-  { tag: tags.heading5, fontSize: "1.05em", fontWeight: "bold" },
-  { tag: tags.heading6, fontSize: "1em", fontWeight: "bold" },
-  { tag: tags.strong, fontWeight: "bold" },
-  { tag: tags.emphasis, fontStyle: "italic" },
-  { tag: tags.strikethrough, textDecoration: "line-through" },
-  { tag: tags.link, color: "#58a6ff", textDecoration: "underline" },
-  { tag: tags.url, color: "#58a6ff" },
-  { tag: tags.monospace, fontFamily: "monospace", color: "#e6b450" },
-  { tag: tags.quote, color: "#8b949e", fontStyle: "italic" },
-  { tag: tags.processingInstruction, color: "#8b949e" },
+  { tag: tags.heading1, class: "cm-h1" },
+  { tag: tags.heading2, class: "cm-h2" },
+  { tag: tags.heading3, class: "cm-h3" },
+  { tag: tags.heading4, class: "cm-h4" },
+  { tag: tags.heading5, class: "cm-h5" },
+  { tag: tags.heading6, class: "cm-h6" },
+  { tag: tags.strong, class: "cm-strong" },
+  { tag: tags.emphasis, class: "cm-em" },
+  { tag: tags.strikethrough, class: "cm-strikethrough" },
+  { tag: tags.link, class: "cm-md-link" },
+  { tag: tags.url, class: "cm-md-link" },
+  { tag: tags.monospace, class: "cm-md-code" },
+  { tag: tags.quote, class: "cm-md-quote" },
+  { tag: tags.processingInstruction, class: "cm-md-meta" },
 ]);
 
 const theme = EditorView.theme({
@@ -46,23 +47,36 @@ const theme = EditorView.theme({
   },
   ".cm-content": {
     padding: "12px 16px",
-    caretColor: "var(--text-primary, #c9d1d9)",
+    caretColor: "var(--text)",
   },
   ".cm-line": {
     padding: "0",
   },
   "&.cm-focused .cm-cursor": {
-    borderLeftColor: "var(--text-primary, #c9d1d9)",
+    borderLeftColor: "var(--text)",
   },
   "&.cm-focused .cm-selectionBackground, .cm-selectionBackground": {
-    backgroundColor: "rgba(56, 139, 253, 0.3) !important",
+    backgroundColor: "var(--cm-selection, rgba(56, 139, 253, 0.3)) !important",
   },
   "&.cm-focused": {
     outline: "none",
   },
   ".cm-placeholder": {
-    color: "var(--text-muted, #484f58)",
+    color: "var(--text-muted)",
   },
+  ".cm-h1": { fontSize: "1.6em", fontWeight: "bold", color: "var(--accent)" },
+  ".cm-h2": { fontSize: "1.4em", fontWeight: "bold", color: "var(--accent)" },
+  ".cm-h3": { fontSize: "1.2em", fontWeight: "bold", color: "var(--accent)" },
+  ".cm-h4": { fontSize: "1.1em", fontWeight: "bold", color: "var(--accent)" },
+  ".cm-h5": { fontSize: "1.05em", fontWeight: "bold", color: "var(--accent)" },
+  ".cm-h6": { fontSize: "1em", fontWeight: "bold", color: "var(--accent)" },
+  ".cm-strong": { fontWeight: "bold" },
+  ".cm-em": { fontStyle: "italic" },
+  ".cm-strikethrough": { textDecoration: "line-through" },
+  ".cm-md-link": { color: "var(--accent)", textDecoration: "underline" },
+  ".cm-md-code": { fontFamily: "monospace", color: "var(--cm-code)" },
+  ".cm-md-quote": { fontStyle: "italic", color: "var(--text-muted)" },
+  ".cm-md-meta": { color: "var(--text-muted)" },
 });
 
 export const MarkdownPanel = forwardRef<MarkdownPanelHandle, MarkdownPanelProps>(
@@ -81,7 +95,7 @@ export const MarkdownPanel = forwardRef<MarkdownPanelHandle, MarkdownPanelProps>
           theme,
           markdown({ base: markdownLanguage }),
           syntaxHighlighting(markdownHighlight),
-          cmPlaceholder("Markdownを入力..."),
+          cmPlaceholder(t("editorPlaceholder")),
           EditorView.lineWrapping,
           keymap.of([]),
           EditorView.updateListener.of((update) => {
@@ -127,7 +141,6 @@ export const MarkdownPanel = forwardRef<MarkdownPanelHandle, MarkdownPanelProps>
 
     return (
       <section className="panel editor-panel">
-        <h2 className="panel-title">Markdown</h2>
         <div className="editor-container">
           <div className="codemirror-wrapper" ref={containerRef} />
         </div>

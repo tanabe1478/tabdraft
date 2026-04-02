@@ -16,7 +16,20 @@ export const defaultKeybindings: KeybindingMap = {
   focusEditor: { code: "Digit2", altKey: true },
 };
 
+export type Theme = "system" | "light" | "dark" | "monokai";
+
+export interface Settings {
+  readonly showTodo: boolean;
+  readonly theme: Theme;
+}
+
+export const defaultSettings: Settings = {
+  showTodo: false,
+  theme: "system",
+};
+
 const KEYBINDINGS_KEY = "tabdraft_keybindings";
+const SETTINGS_KEY = "tabdraft_settings";
 
 function getStorage(): chrome.storage.SyncStorageArea | null {
   if (typeof chrome !== "undefined" && chrome.storage?.sync) {
@@ -42,6 +55,25 @@ export async function saveKeybindings(bindings: KeybindingMap): Promise<void> {
     return;
   }
   localStorage.setItem(KEYBINDINGS_KEY, JSON.stringify(bindings));
+}
+
+export async function loadSettings(): Promise<Settings> {
+  const storage = getStorage();
+  if (storage) {
+    const result = await storage.get(SETTINGS_KEY);
+    return (result[SETTINGS_KEY] as Settings | undefined) ?? defaultSettings;
+  }
+  const raw = localStorage.getItem(SETTINGS_KEY);
+  return raw ? JSON.parse(raw) : defaultSettings;
+}
+
+export async function saveSettings(settings: Settings): Promise<void> {
+  const storage = getStorage();
+  if (storage) {
+    await storage.set({ [SETTINGS_KEY]: settings });
+    return;
+  }
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
 }
 
 export function matchesKeybinding(e: KeyboardEvent, binding: Keybinding): boolean {

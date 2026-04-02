@@ -6,15 +6,19 @@ import { loadData, debouncedSave, type AppData } from "./storage";
 import { addTodo, toggleTodo, removeTodo } from "./todo";
 import {
   type KeybindingMap,
+  type Settings,
   loadKeybindings,
   saveKeybindings,
+  loadSettings,
+  saveSettings,
   matchesKeybinding,
-  formatKeybinding,
 } from "./keybindings";
+import { applyTheme, watchSystemTheme } from "./theme";
 
 export function App() {
   const [data, setData] = useState<AppData | null>(null);
   const [keybindings, setKeybindings] = useState<KeybindingMap | null>(null);
+  const [settings, setSettings] = useState<Settings | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const todoRef = useRef<TodoPanelHandle>(null);
   const markdownRef = useRef<MarkdownPanelHandle>(null);
@@ -22,9 +26,9 @@ export function App() {
   useEffect(() => {
     loadData().then(setData);
     loadKeybindings().then(setKeybindings);
+    loadSettings().then(setSettings);
   }, []);
 
-  // Global keyboard shortcuts (capture phase to intercept before textarea-markdown-editor)
   useEffect(() => {
     if (!keybindings) return;
 
@@ -43,7 +47,6 @@ export function App() {
     window.addEventListener("keydown", handleKeyDown, true);
     return () => window.removeEventListener("keydown", handleKeyDown, true);
   }, [keybindings, settingsOpen]);
-
 
   const save = useCallback((next: AppData) => {
     setData(next);
@@ -89,48 +92,51 @@ export function App() {
     markdownRef.current?.focus();
   }, []);
 
-  const handleSaveKeybindings = useCallback((next: KeybindingMap) => {
-    setKeybindings(next);
-    saveKeybindings(next);
+  const handleSaveSettings = useCallback((nextKeybindings: KeybindingMap, nextSettings: Settings) => {
+    setKeybindings(nextKeybindings);
+    saveKeybindings(nextKeybindings);
+    setSettings(nextSettings);
+    saveSettings(nextSettings);
   }, []);
+
+  // Apply theme
+  useEffect(() => {
+    if (!settings) return;
+    applyTheme(settings.theme);
+    return watchSystemTheme(settings.theme, () => applyTheme(settings.theme));
+  }, [settings?.theme]);
 
   // Auto-focus editor on mount (after window.open bypasses omnibox focus)
   useEffect(() => {
-    if (data && keybindings) {
+    if (data && keybindings && settings) {
       requestAnimationFrame(() => {
         markdownRef.current?.focus();
       });
     }
-  }, [data !== null && keybindings !== null]);
+  }, [data !== null && keybindings !== null && settings !== null]);
 
-  if (!data || !keybindings) return null;
+  if (!data || !keybindings || !settings) return null;
 
   return (
     <div id="app">
-      <header className="header">
-        <h1 className="header-title">TabDraft</h1>
-        <span className="header-shortcuts">
-          {formatKeybinding(keybindings.focusTodo)}: TODO
-          {" \u00b7 "}
-          {formatKeybinding(keybindings.focusEditor)}: Editor
-        </span>
-        <button
-          className="btn btn-settings"
-          onClick={() => setSettingsOpen(true)}
-          title="Settings"
-        >
-          &#9881;
-        </button>
-      </header>
+      <button
+        className="btn-settings-float"
+        onClick={() => setSettingsOpen(true)}
+        title="Settings"
+      >
+        &#9881;
+      </button>
       <main className="main">
-        <TodoPanel
-          ref={todoRef}
-          todos={data.todos}
-          onAdd={handleAddTodo}
-          onToggle={handleToggleTodo}
-          onRemove={handleRemoveTodo}
-          onEscape={focusMarkdown}
-        />
+        {settings.showTodo && (
+          <TodoPanel
+            ref={todoRef}
+            todos={data.todos}
+            onAdd={handleAddTodo}
+            onToggle={handleToggleTodo}
+            onRemove={handleRemoveTodo}
+            onEscape={focusMarkdown}
+          />
+        )}
         <MarkdownPanel
           ref={markdownRef}
           value={data.markdown}
@@ -140,7 +146,8 @@ export function App() {
       <SettingsDialog
         open={settingsOpen}
         keybindings={keybindings}
-        onSave={handleSaveKeybindings}
+        settings={settings}
+        onSave={handleSaveSettings}
         onClose={() => setSettingsOpen(false)}
       />
     </div>

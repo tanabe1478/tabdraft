@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useImperativeHandle, forwardRef, type KeyboardEvent } from "react";
 import type { TodoItem } from "../storage";
+import { t } from "../i18n";
 
 interface TodoPanelProps {
   readonly todos: readonly TodoItem[];
@@ -102,14 +103,13 @@ export const TodoPanel = forwardRef<TodoPanelHandle, TodoPanelProps>(
     return (
       <section className="panel todo-panel">
         <h2 className="panel-title">
-          TODO
-          <span className="panel-hint">⌘Enter: 追加</span>
+          {t("todo")}
         </h2>
         <div className="todo-input-row">
           <textarea
             ref={inputRef}
             className="todo-input"
-            placeholder="タスクを追加... (⌘Enterで追加)"
+            placeholder={t("addPlaceholder")}
             rows={3}
             value={input}
             onChange={(e) => setInput(e.target.value)}
