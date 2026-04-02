@@ -1,6 +1,7 @@
 import { useRef, useCallback, useImperativeHandle, forwardRef, useEffect } from "react";
 import { EditorView, keymap, placeholder as cmPlaceholder } from "@codemirror/view";
 import { EditorState } from "@codemirror/state";
+import { indentMore, indentLess } from "@codemirror/commands";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { syntaxHighlighting, HighlightStyle } from "@codemirror/language";
 import { tags } from "@lezer/highlight";
@@ -99,7 +100,10 @@ export const MarkdownPanel = forwardRef<MarkdownPanelHandle, MarkdownPanelProps>
           syntaxHighlighting(markdownHighlight),
           cmPlaceholder(t("editorPlaceholder")),
           EditorView.lineWrapping,
-          keymap.of([]),
+          keymap.of([
+            { key: "Tab", run: indentMore },
+            { key: "Shift-Tab", run: indentLess },
+          ]),
           EditorView.updateListener.of((update) => {
             if (update.docChanged) {
               onChangeRef.current(update.state.doc.toString());
